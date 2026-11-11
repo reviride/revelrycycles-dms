@@ -3,12 +3,13 @@
 # Paste this whole file into an SSH session as root, or save it and run: bash install-pilot.sh
 set -euo pipefail
 DOMAIN="${DOMAIN:-dms.revelrycycles.com.au}"
+# Fresh servers run their own automatic updates on first boot; wait for them instead of failing.
 export DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a
 mkdir -p /opt/erpnext && cd /opt/erpnext
 set -euo pipefail
 
 # 0. SSH hardening first: fail2ban, and key-only login once a key is installed (never locks you out)
-apt-get update && apt-get -y install fail2ban && systemctl enable --now fail2ban
+apt-get -o DPkg::Lock::Timeout=900 update && apt-get -o DPkg::Lock::Timeout=900 -y install fail2ban && systemctl enable --now fail2ban
 if [ -s /root/.ssh/authorized_keys ]; then
   printf 'PasswordAuthentication no\nKbdInteractiveAuthentication no\nPermitRootLogin prohibit-password\n' > /etc/ssh/sshd_config.d/00-keys-only.conf
   systemctl reload ssh
@@ -18,8 +19,8 @@ else
 fi
 
 # 1. Updates and automatic security patches
-apt-get update && apt-get -y upgrade
-apt-get -y install unattended-upgrades ufw curl git
+apt-get -o DPkg::Lock::Timeout=900 update && apt-get -o DPkg::Lock::Timeout=900 -y upgrade
+apt-get -o DPkg::Lock::Timeout=900 -y install unattended-upgrades ufw curl git
 dpkg-reconfigure -f noninteractive unattended-upgrades
 
 # 2. 4 GB swap: ERPNext needs headroom above 4 GB RAM during updates
