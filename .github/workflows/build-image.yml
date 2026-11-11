@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Read pinned versions
-        run: cat image/versions.env >> "$GITHUB_ENV"
+        run: grep -E "^[A-Z_]+=" image/versions.env >> "$GITHUB_ENV"
 
       - uses: actions/checkout@v4
         with:
