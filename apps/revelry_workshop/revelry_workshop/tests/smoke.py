@@ -31,19 +31,12 @@ def run():
 	abbr = frappe.db.get_value("Company", company, "abbr")
 	frappe.defaults.set_user_default("Company", company)
 
-	if not frappe.db.exists("Item", "LABOUR"):
-		frappe.get_doc({"doctype": "Item", "item_code": "LABOUR", "item_name": "Workshop labour",
-			"item_group": "Services", "stock_uom": "Hour" if frappe.db.exists("UOM", "Hour") else "Nos",
-			"is_stock_item": 0}).insert()
 	if not frappe.db.exists("Item", "OILFILTER"):
 		frappe.get_doc({"doctype": "Item", "item_code": "OILFILTER", "item_name": "Oil filter",
 			"item_group": "Products", "stock_uom": "Nos", "is_stock_item": 0}).insert()
 	s = frappe.get_doc("Workshop Settings")
-	s.labour_item = "LABOUR"
-	s.shop_warehouse = f"Stores - {abbr}"
-	s.wip_warehouse = f"Work In Progress - {abbr}"
-	s.sales_taxes_template = f"AU Sales - GST - {abbr}"
-	s.save()
+	assert s.labour_item == "LABOUR" and s.wip_warehouse == f"Work In Progress - {abbr}", s.as_dict()
+	assert s.sales_taxes_template == f"AU Sales - GST - {abbr}", s.sales_taxes_template
 
 	cust = frappe.db.get_value("Customer", {"customer_name": "Smoke Rider"}) or frappe.get_doc(
 		{"doctype": "Customer", "customer_name": "Smoke Rider", "customer_type": "Individual"}
