@@ -45,6 +45,8 @@ cat > compose.yml <<'__EOF__'
 # ERPNext v15 pilot, adapted from frappe_docker's pwd.yml and tuned for a 4 GB server.
 # Changes from upstream: pinned v15 image, MariaDB 10.6 with a 512 MB buffer pool,
 # one combined worker, passwords from .env, and Caddy in front for automatic HTTPS.
+# App services wait for create-site to finish: running them during site creation
+# deadlocks the installer on a table metadata lock.
 x-erpnext: &erpnext
   image: ${ERPNEXT_IMAGE}
   restart: unless-stopped
@@ -94,7 +96,7 @@ services:
   backend:
     <<: *erpnext
     depends_on:
-      configurator:
+      create-site:
         condition: service_completed_successfully
 
   frontend:
@@ -114,7 +116,7 @@ services:
     <<: *erpnext
     command: ["node", "/home/frappe/frappe-bench/apps/frappe/socketio.js"]
     depends_on:
-      configurator:
+      create-site:
         condition: service_completed_successfully
 
   # One worker for all queues instead of upstream's two, to save about 300 MB RAM.
@@ -122,14 +124,14 @@ services:
     <<: *erpnext
     command: ["bench", "worker", "--queue", "long,default,short"]
     depends_on:
-      configurator:
+      create-site:
         condition: service_completed_successfully
 
   scheduler:
     <<: *erpnext
     command: ["bench", "schedule"]
     depends_on:
-      configurator:
+      create-site:
         condition: service_completed_successfully
 
   db:
@@ -214,7 +216,6 @@ docker compose up -d
 echo "Waiting for the site to install (5 to 10 minutes)..."
 until [ "$(docker compose ps -a create-site --format '{{.State}}')" = "exited" ]; do sleep 15; done
 docker compose ps -a create-site --format 'create-site exit code: {{.ExitCode}}'
-docker compose restart backend worker scheduler websocket frontend
 echo
 echo "Done. Open https://${DOMAIN} once DNS points here."
 echo "Administrator password is in /opt/erpnext/.env (ADMIN_PASSWORD). Do not paste it into chat."
