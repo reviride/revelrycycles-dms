@@ -22,3 +22,17 @@ and the whole stack idled at about 540 MB RAM on an empty site.
 
 ## Note on Docker Hub
 If an image pull fails with "429 Too Many Requests", pull via `mirror.gcr.io/<image>` and retag it.
+
+## Switching to the custom image (ERPNext + WooCommerce Fusion + workshop module)
+
+GitHub Actions builds `ghcr.io/reviride/revelrycycles-dms` whenever `image/` or `apps/` changes.
+On the server:
+
+```
+cd /opt/erpnext
+sed -i 's|^ERPNEXT_IMAGE=.*|ERPNEXT_IMAGE=ghcr.io/reviride/revelrycycles-dms:latest|' .env
+./backup.sh
+docker compose pull && docker compose up -d
+docker compose exec backend bench --site dms.revelrycycles.com.au install-app woocommerce_fusion
+docker compose exec backend bench --site dms.revelrycycles.com.au migrate
+```

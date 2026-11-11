@@ -1,0 +1,59 @@
+name: Build ERPNext image
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "image/**"
+      - "apps/**"
+      - ".github/workflows/build-image.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read pinned versions
+        run: cat image/versions.env >> "$GITHUB_ENV"
+
+      - uses: actions/checkout@v4
+        with:
+          repository: frappe/frappe_docker
+          ref: ${{ env.FRAPPE_DOCKER_REF }}
+          path: frappe_docker
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Image name
+        id: meta
+        run: |
+          echo "image=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+          echo "tag=$(date -u +%Y%m%d)-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: frappe_docker
+          file: frappe_docker/images/layered/Containerfile
+          build-args: |
+            FRAPPE_BRANCH=${{ env.FRAPPE_BRANCH }}
+            FRAPPE_IMAGE_PREFIX=frappe
+          secret-files: |
+            apps_json=image/apps.json
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.tag }}
+            ${{ steps.meta.outputs.image }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

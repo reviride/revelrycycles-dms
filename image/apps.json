@@ -1,0 +1,4 @@
+[
+  { "url": "https://github.com/frappe/erpnext", "branch": "v15.124.5" },
+  { "url": "https://github.com/dvdl16/woocommerce_fusion", "branch": "version-15" }
+]
