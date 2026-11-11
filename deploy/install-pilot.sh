@@ -25,6 +25,16 @@ ufw allow OpenSSH && ufw allow 80/tcp && ufw allow 443/tcp && ufw --force enable
 # 4. Docker (official install script)
 if ! command -v docker >/dev/null; then curl -fsSL https://get.docker.com | sh; fi
 
+# 5. SSH hardening: fail2ban, and key-only login once a key is installed (never locks you out)
+apt-get -y install fail2ban && systemctl enable --now fail2ban
+if [ -s /root/.ssh/authorized_keys ]; then
+  printf 'PasswordAuthentication no\nKbdInteractiveAuthentication no\nPermitRootLogin prohibit-password\n' > /etc/ssh/sshd_config.d/00-keys-only.conf
+  systemctl reload ssh
+  echo "SSH is now key-only."
+else
+  echo "WARNING: no SSH key in /root/.ssh/authorized_keys, so password login stays ON. Add a key and re-run."
+fi
+
 echo "Server ready. Next: copy compose.yml, Caddyfile and .env here, then: docker compose up -d"
 
 cd /opt/erpnext
