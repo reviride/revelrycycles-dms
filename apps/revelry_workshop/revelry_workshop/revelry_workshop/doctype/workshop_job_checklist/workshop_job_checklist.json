@@ -1,0 +1,73 @@
+{
+ "creation": "2026-11-12 10:00:00.000000",
+ "custom": 0,
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "item_text",
+  "code",
+  "result",
+  "completed_by",
+  "completed_on",
+  "comment"
+ ],
+ "fields": [
+  {
+   "columns": 4,
+   "fieldname": "item_text",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Checklist Item",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Code"
+  },
+  {
+   "columns": 2,
+   "fieldname": "result",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Result",
+   "options": "\nDone\nOK\nNeeds Attention\nN/A"
+  },
+  {
+   "columns": 1,
+   "fieldname": "completed_by",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Completed By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "completed_on",
+   "fieldtype": "Datetime",
+   "label": "Completed On",
+   "read_only": 1
+  },
+  {
+   "columns": 2,
+   "fieldname": "comment",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Comment"
+  }
+ ],
+ "istable": 1,
+ "modified": "2026-11-12 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Revelry Workshop",
+ "name": "Workshop Job Checklist",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}

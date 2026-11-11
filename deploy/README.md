@@ -34,5 +34,6 @@ sed -i 's|^ERPNEXT_IMAGE=.*|ERPNEXT_IMAGE=ghcr.io/reviride/revelrycycles-dms:lat
 ./backup.sh
 docker compose pull && docker compose up -d
 docker compose exec backend bench --site dms.revelrycycles.com.au install-app woocommerce_fusion
+docker compose exec backend bench --site dms.revelrycycles.com.au install-app revelry_workshop
 docker compose exec backend bench --site dms.revelrycycles.com.au migrate
 ```

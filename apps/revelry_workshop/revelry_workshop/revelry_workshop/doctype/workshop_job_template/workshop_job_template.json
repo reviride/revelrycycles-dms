@@ -1,0 +1,193 @@
+{
+ "autoname": "field:template_code",
+ "creation": "2026-11-12 10:00:00.000000",
+ "custom": 0,
+ "doctype": "DocType",
+ "editable_grid": 0,
+ "engine": "InnoDB",
+ "field_order": [
+  "template_code",
+  "description",
+  "job_type",
+  "skill_level",
+  "cb_1",
+  "estimated_hours",
+  "labour_rate",
+  "pricing",
+  "tax_inclusive",
+  "show_hours",
+  "show_description",
+  "show_details",
+  "sb_details",
+  "details",
+  "checklist",
+  "parts",
+  "disabled"
+ ],
+ "fields": [
+  {
+   "fieldname": "template_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Job Code",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Description",
+   "reqd": 1
+  },
+  {
+   "default": "Normal",
+   "fieldname": "job_type",
+   "fieldtype": "Select",
+   "label": "Job Type",
+   "options": "Normal\nWarranty\nTrade\nInternal\nDelivery/Collection"
+  },
+  {
+   "default": "5",
+   "fieldname": "skill_level",
+   "fieldtype": "Int",
+   "label": "Skill Level"
+  },
+  {
+   "fieldname": "cb_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "estimated_hours",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Estimated Hours"
+  },
+  {
+   "default": "140",
+   "fieldname": "labour_rate",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Labour Rate"
+  },
+  {
+   "default": "Hourly",
+   "fieldname": "pricing",
+   "fieldtype": "Select",
+   "label": "Pricing",
+   "options": "Hourly\nFixed Price\nFixed Price Including Parts"
+  },
+  {
+   "default": "1",
+   "fieldname": "tax_inclusive",
+   "fieldtype": "Check",
+   "label": "Tax Inclusive"
+  },
+  {
+   "default": "1",
+   "fieldname": "show_hours",
+   "fieldtype": "Check",
+   "label": "Show Hours on Invoice"
+  },
+  {
+   "default": "1",
+   "fieldname": "show_description",
+   "fieldtype": "Check",
+   "label": "Show Description on Invoice"
+  },
+  {
+   "default": "1",
+   "fieldname": "show_details",
+   "fieldtype": "Check",
+   "label": "Show Details on Invoice"
+  },
+  {
+   "fieldname": "sb_details",
+   "fieldtype": "Section Break",
+   "label": "Details"
+  },
+  {
+   "fieldname": "details",
+   "fieldtype": "Text",
+   "label": "Details"
+  },
+  {
+   "fieldname": "checklist",
+   "fieldtype": "Table",
+   "label": "Checklist",
+   "options": "Workshop Template Checklist Item"
+  },
+  {
+   "fieldname": "parts",
+   "fieldtype": "Table",
+   "label": "Standard Parts",
+   "options": "Workshop Template Part"
+  },
+  {
+   "fieldname": "disabled",
+   "fieldtype": "Check",
+   "label": "Disabled"
+  }
+ ],
+ "istable": 0,
+ "modified": "2026-11-12 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Revelry Workshop",
+ "name": "Workshop Job Template",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Stock User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts User",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "search_fields": "description",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

@@ -42,7 +42,8 @@ jobs:
           echo "image=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
           echo "tag=$(date -u +%Y%m%d)-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
 
-      - uses: docker/build-push-action@v6
+      - name: ERPNext and WooCommerce Fusion
+        uses: docker/build-push-action@v6
         with:
           context: frappe_docker
           file: frappe_docker/images/layered/Containerfile
@@ -52,8 +53,18 @@ jobs:
           secret-files: |
             apps_json=image/apps.json
           push: true
+          tags: ${{ steps.meta.outputs.image }}:base-${{ steps.meta.outputs.tag }}
+          cache-from: type=gha,scope=base
+          cache-to: type=gha,mode=max,scope=base
+
+      - name: Add the workshop module
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: image/Containerfile
+          build-args: |
+            BASE_IMAGE=${{ steps.meta.outputs.image }}:base-${{ steps.meta.outputs.tag }}
+          push: true
           tags: |
             ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.tag }}
             ${{ steps.meta.outputs.image }}:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max

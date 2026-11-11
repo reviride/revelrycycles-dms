@@ -1,0 +1,76 @@
+{
+ "creation": "2026-11-12 10:00:00.000000",
+ "custom": 0,
+ "doctype": "DocType",
+ "editable_grid": 0,
+ "engine": "InnoDB",
+ "field_order": [
+  "labour_item",
+  "default_labour_rate",
+  "cb_1",
+  "shop_warehouse",
+  "wip_warehouse",
+  "sales_taxes_template"
+ ],
+ "fields": [
+  {
+   "description": "Non-stock service item used for labour lines on invoices",
+   "fieldname": "labour_item",
+   "fieldtype": "Link",
+   "label": "Labour Item",
+   "options": "Item"
+  },
+  {
+   "default": "140",
+   "fieldname": "default_labour_rate",
+   "fieldtype": "Currency",
+   "label": "Default Labour Rate (inc GST)"
+  },
+  {
+   "fieldname": "cb_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "shop_warehouse",
+   "fieldtype": "Link",
+   "label": "Shop Warehouse",
+   "options": "Warehouse"
+  },
+  {
+   "description": "Fitted parts move here until the job is invoiced",
+   "fieldname": "wip_warehouse",
+   "fieldtype": "Link",
+   "label": "Workshop WIP Warehouse",
+   "options": "Warehouse"
+  },
+  {
+   "description": "Usually AU Sales - GST. Workshop prices are entered including GST.",
+   "fieldname": "sales_taxes_template",
+   "fieldtype": "Link",
+   "label": "Sales Tax Template (GST)",
+   "options": "Sales Taxes and Charges Template"
+  }
+ ],
+ "issingle": 1,
+ "istable": 0,
+ "modified": "2026-11-12 11:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Revelry Workshop",
+ "name": "Workshop Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

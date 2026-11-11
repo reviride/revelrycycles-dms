@@ -1,0 +1,544 @@
+{
+ "autoname": "naming_series:",
+ "creation": "2026-11-12 10:00:00.000000",
+ "custom": 0,
+ "doctype": "DocType",
+ "editable_grid": 0,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "status",
+  "job_type",
+  "priority",
+  "cb_h1",
+  "parts_status",
+  "technician",
+  "person_in_charge",
+  "cb_h2",
+  "scheduled_start",
+  "scheduled_end",
+  "required_by",
+  "parent_job",
+  "sb_customer",
+  "customer",
+  "customer_name",
+  "mobile_no",
+  "notify_method",
+  "customer_reference",
+  "cb_c1",
+  "motorcycle",
+  "vin",
+  "rego",
+  "bike",
+  "odometer_in",
+  "odometer_out",
+  "sb_work",
+  "template",
+  "description",
+  "details",
+  "checklist",
+  "sb_labour",
+  "pricing",
+  "labour_rate",
+  "tax_inclusive",
+  "cb_l1",
+  "estimated_hours",
+  "skill_level",
+  "labour",
+  "sb_parts",
+  "parts",
+  "new_parts_location",
+  "cb_p1",
+  "stripped_parts_location",
+  "unit_location",
+  "sb_bookings",
+  "bookings",
+  "sb_finish",
+  "work_done",
+  "next_service_date",
+  "next_service_odometer",
+  "notify_customer",
+  "cb_f1",
+  "show_hours",
+  "show_description",
+  "show_details",
+  "internal_notes",
+  "sb_totals",
+  "labour_total",
+  "parts_total",
+  "cb_t1",
+  "grand_total",
+  "deposit_total",
+  "sales_invoice",
+  "sb_evopos",
+  "evopos_job_no",
+  "evopos_status"
+ ],
+ "fields": [
+  {
+   "default": "JOB-.#####",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Series",
+   "options": "JOB-.#####",
+   "reqd": 1
+  },
+  {
+   "bold": 1,
+   "default": "Booked",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "options": "Booked\nAvailable\nIn Progress\nHold\nCompleted\nApproved\nInvoiced\nCancelled",
+   "reqd": 1
+  },
+  {
+   "default": "Normal",
+   "fieldname": "job_type",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Job Type",
+   "options": "Normal\nWarranty\nTrade\nInternal\nDelivery/Collection"
+  },
+  {
+   "default": "Normal",
+   "fieldname": "priority",
+   "fieldtype": "Select",
+   "in_standard_filter": 1,
+   "label": "Priority",
+   "options": "Normal\nUrgent\nCritical"
+  },
+  {
+   "fieldname": "cb_h1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "OK",
+   "fieldname": "parts_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Parts Status",
+   "options": "OK\nCheck\nRequested\nTo Order\nOn Order"
+  },
+  {
+   "fieldname": "technician",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Technician",
+   "options": "User"
+  },
+  {
+   "fieldname": "person_in_charge",
+   "fieldtype": "Link",
+   "label": "Person in Charge",
+   "options": "User"
+  },
+  {
+   "fieldname": "cb_h2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "scheduled_start",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Start"
+  },
+  {
+   "fieldname": "scheduled_end",
+   "fieldtype": "Datetime",
+   "label": "Finish"
+  },
+  {
+   "fieldname": "required_by",
+   "fieldtype": "Datetime",
+   "label": "Required By"
+  },
+  {
+   "description": "Group several jobs from one visit",
+   "fieldname": "parent_job",
+   "fieldtype": "Link",
+   "label": "Visit (Parent Job)",
+   "options": "Workshop Job"
+  },
+  {
+   "fieldname": "sb_customer",
+   "fieldtype": "Section Break",
+   "label": "Customer and Bike"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fetch_from": "customer.customer_name",
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Customer Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "mobile_no",
+   "fieldtype": "Data",
+   "label": "Mobile",
+   "options": "Phone"
+  },
+  {
+   "fieldname": "notify_method",
+   "fieldtype": "Select",
+   "label": "Preferred Contact",
+   "options": "\nSMS\nEmail\nPhone"
+  },
+  {
+   "fieldname": "customer_reference",
+   "fieldtype": "Data",
+   "label": "Customer Reference"
+  },
+  {
+   "fieldname": "cb_c1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "motorcycle",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Motorcycle",
+   "options": "Motorcycle"
+  },
+  {
+   "fetch_from": "motorcycle.vin",
+   "fieldname": "vin",
+   "fieldtype": "Data",
+   "label": "VIN",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "motorcycle.rego",
+   "fieldname": "rego",
+   "fieldtype": "Data",
+   "label": "Rego",
+   "read_only": 1
+  },
+  {
+   "fieldname": "bike",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Bike",
+   "read_only": 1
+  },
+  {
+   "fieldname": "odometer_in",
+   "fieldtype": "Int",
+   "label": "Odometer In"
+  },
+  {
+   "fieldname": "odometer_out",
+   "fieldtype": "Int",
+   "label": "Odometer Out"
+  },
+  {
+   "fieldname": "sb_work",
+   "fieldtype": "Section Break",
+   "label": "Work"
+  },
+  {
+   "fieldname": "template",
+   "fieldtype": "Link",
+   "label": "Job Template",
+   "options": "Workshop Job Template"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Description",
+   "reqd": 1
+  },
+  {
+   "fieldname": "details",
+   "fieldtype": "Text",
+   "label": "Details / Customer Concerns"
+  },
+  {
+   "fieldname": "checklist",
+   "fieldtype": "Table",
+   "label": "Checklist",
+   "options": "Workshop Job Checklist"
+  },
+  {
+   "fieldname": "sb_labour",
+   "fieldtype": "Section Break",
+   "label": "Labour"
+  },
+  {
+   "default": "Hourly",
+   "fieldname": "pricing",
+   "fieldtype": "Select",
+   "label": "Pricing",
+   "options": "Hourly\nFixed Price\nFixed Price Including Parts"
+  },
+  {
+   "default": "140",
+   "fieldname": "labour_rate",
+   "fieldtype": "Currency",
+   "label": "Labour Rate"
+  },
+  {
+   "default": "1",
+   "fieldname": "tax_inclusive",
+   "fieldtype": "Check",
+   "label": "Tax Inclusive"
+  },
+  {
+   "fieldname": "cb_l1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "estimated_hours",
+   "fieldtype": "Float",
+   "label": "Estimated Hours"
+  },
+  {
+   "fieldname": "skill_level",
+   "fieldtype": "Int",
+   "label": "Skill Level"
+  },
+  {
+   "fieldname": "labour",
+   "fieldtype": "Table",
+   "label": "Labour",
+   "options": "Workshop Job Labour"
+  },
+  {
+   "fieldname": "sb_parts",
+   "fieldtype": "Section Break",
+   "label": "Parts"
+  },
+  {
+   "fieldname": "parts",
+   "fieldtype": "Table",
+   "label": "Parts",
+   "options": "Workshop Job Part"
+  },
+  {
+   "fieldname": "new_parts_location",
+   "fieldtype": "Data",
+   "label": "New Parts Location"
+  },
+  {
+   "fieldname": "cb_p1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "stripped_parts_location",
+   "fieldtype": "Data",
+   "label": "Stripped Parts Location"
+  },
+  {
+   "fieldname": "unit_location",
+   "fieldtype": "Data",
+   "label": "Bike Location"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "sb_bookings",
+   "fieldtype": "Section Break",
+   "label": "Bookings"
+  },
+  {
+   "fieldname": "bookings",
+   "fieldtype": "Table",
+   "label": "Bookings",
+   "options": "Workshop Job Booking"
+  },
+  {
+   "fieldname": "sb_finish",
+   "fieldtype": "Section Break",
+   "label": "Finish"
+  },
+  {
+   "fieldname": "work_done",
+   "fieldtype": "Text",
+   "label": "Work Done (printed on invoice)"
+  },
+  {
+   "fieldname": "next_service_date",
+   "fieldtype": "Date",
+   "label": "Next Service Due"
+  },
+  {
+   "fieldname": "next_service_odometer",
+   "fieldtype": "Int",
+   "label": "Next Service Due (km)"
+  },
+  {
+   "description": "Tick to send the ready-for-pickup message. Never sent automatically.",
+   "fieldname": "notify_customer",
+   "fieldtype": "Check",
+   "label": "Notify Customer"
+  },
+  {
+   "fieldname": "cb_f1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "show_hours",
+   "fieldtype": "Check",
+   "label": "Show Hours on Invoice"
+  },
+  {
+   "default": "1",
+   "fieldname": "show_description",
+   "fieldtype": "Check",
+   "label": "Show Description on Invoice"
+  },
+  {
+   "default": "1",
+   "fieldname": "show_details",
+   "fieldtype": "Check",
+   "label": "Show Details on Invoice"
+  },
+  {
+   "fieldname": "internal_notes",
+   "fieldtype": "Small Text",
+   "label": "Internal Notes (never printed)"
+  },
+  {
+   "fieldname": "sb_totals",
+   "fieldtype": "Section Break",
+   "label": "Totals"
+  },
+  {
+   "fieldname": "labour_total",
+   "fieldtype": "Currency",
+   "label": "Labour",
+   "read_only": 1
+  },
+  {
+   "fieldname": "parts_total",
+   "fieldtype": "Currency",
+   "label": "Parts",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cb_t1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "bold": 1,
+   "fieldname": "grand_total",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Total inc GST",
+   "read_only": 1
+  },
+  {
+   "fieldname": "deposit_total",
+   "fieldtype": "Currency",
+   "label": "Deposits Paid",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "Sales Invoice",
+   "no_copy": 1,
+   "options": "Sales Invoice",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "sb_evopos",
+   "fieldtype": "Section Break",
+   "label": "EvoPOS"
+  },
+  {
+   "fieldname": "evopos_job_no",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "EvoPOS Job No",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "evopos_status",
+   "fieldtype": "Data",
+   "label": "EvoPOS Status",
+   "no_copy": 1,
+   "read_only": 1
+  }
+ ],
+ "is_calendar_and_gantt": 1,
+ "istable": 0,
+ "modified": "2026-11-12 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Revelry Workshop",
+ "name": "Workshop Job",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Stock User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts User",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "search_fields": "customer_name,description,rego,vin,evopos_job_no",
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "description",
+ "track_changes": 1
+}

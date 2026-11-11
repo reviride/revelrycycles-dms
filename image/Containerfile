@@ -1,0 +1,9 @@
+# Adds the workshop module (apps/revelry_workshop in this repo) on top of the
+# ERPNext + WooCommerce Fusion image built from frappe_docker.
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+USER frappe
+WORKDIR /home/frappe/frappe-bench
+COPY --chown=frappe:0 apps/revelry_workshop apps/revelry_workshop
+RUN ./env/bin/pip install --no-cache-dir -e apps/revelry_workshop && \
+    mkdir -p assets && ln -sfn ../apps/revelry_workshop/revelry_workshop/public assets/revelry_workshop

@@ -1,0 +1,40 @@
+{
+ "creation": "2026-11-12 10:00:00.000000",
+ "custom": 0,
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "item_text",
+  "code"
+ ],
+ "fields": [
+  {
+   "columns": 8,
+   "fieldname": "item_text",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Checklist Item",
+   "reqd": 1
+  },
+  {
+   "columns": 2,
+   "description": "R replace, I inspect, C clean, L lubricate, A adjust",
+   "fieldname": "code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Code"
+  }
+ ],
+ "istable": 1,
+ "modified": "2026-11-12 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Revelry Workshop",
+ "name": "Workshop Template Checklist Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}

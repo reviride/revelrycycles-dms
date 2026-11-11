@@ -1,0 +1,293 @@
+{
+ "autoname": "hash",
+ "creation": "2026-11-12 10:00:00.000000",
+ "custom": 0,
+ "doctype": "DocType",
+ "editable_grid": 0,
+ "engine": "InnoDB",
+ "field_order": [
+  "title",
+  "vin",
+  "engine_no",
+  "rego",
+  "rego_state",
+  "rego_expiry",
+  "cb_1",
+  "make",
+  "model",
+  "variant",
+  "year",
+  "colour",
+  "sb_owner",
+  "customer",
+  "is_stock_bike",
+  "cb_2",
+  "odometer",
+  "odometer_unit",
+  "next_service_date",
+  "next_service_odometer",
+  "sb_stock",
+  "bought_date",
+  "buy_price",
+  "prep_cost",
+  "cb_3",
+  "asking_price",
+  "sold_date",
+  "sold_price",
+  "sb_hist",
+  "odometer_history",
+  "notes",
+  "evopos_unit_id"
+ ],
+ "fields": [
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Title",
+   "read_only": 1
+  },
+  {
+   "bold": 1,
+   "fieldname": "vin",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "VIN",
+   "unique": 1
+  },
+  {
+   "fieldname": "engine_no",
+   "fieldtype": "Data",
+   "label": "Engine No"
+  },
+  {
+   "fieldname": "rego",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Rego"
+  },
+  {
+   "fieldname": "rego_state",
+   "fieldtype": "Select",
+   "label": "Rego State",
+   "options": "\nNSW\nVIC\nQLD\nSA\nWA\nTAS\nACT\nNT"
+  },
+  {
+   "fieldname": "rego_expiry",
+   "fieldtype": "Date",
+   "label": "Rego Expiry"
+  },
+  {
+   "fieldname": "cb_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "make",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Make"
+  },
+  {
+   "fieldname": "model",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Model"
+  },
+  {
+   "fieldname": "variant",
+   "fieldtype": "Data",
+   "label": "Variant"
+  },
+  {
+   "fieldname": "year",
+   "fieldtype": "Int",
+   "label": "Year"
+  },
+  {
+   "fieldname": "colour",
+   "fieldtype": "Data",
+   "label": "Colour"
+  },
+  {
+   "fieldname": "sb_owner",
+   "fieldtype": "Section Break",
+   "label": "Owner"
+  },
+  {
+   "description": "Blank while the bike is shop stock",
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "is_stock_bike",
+   "fieldtype": "Check",
+   "in_standard_filter": 1,
+   "label": "Shop Stock Bike"
+  },
+  {
+   "fieldname": "cb_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "odometer",
+   "fieldtype": "Int",
+   "label": "Last Odometer",
+   "read_only": 1
+  },
+  {
+   "default": "km",
+   "fieldname": "odometer_unit",
+   "fieldtype": "Select",
+   "label": "Odometer Unit",
+   "options": "km\nhours"
+  },
+  {
+   "fieldname": "next_service_date",
+   "fieldtype": "Date",
+   "label": "Next Service Due"
+  },
+  {
+   "fieldname": "next_service_odometer",
+   "fieldtype": "Int",
+   "label": "Next Service Due (km)"
+  },
+  {
+   "collapsible": 1,
+   "depends_on": "is_stock_bike",
+   "fieldname": "sb_stock",
+   "fieldtype": "Section Break",
+   "label": "Used Bike Stock"
+  },
+  {
+   "fieldname": "bought_date",
+   "fieldtype": "Date",
+   "label": "Bought Date"
+  },
+  {
+   "fieldname": "buy_price",
+   "fieldtype": "Currency",
+   "label": "Buy Price"
+  },
+  {
+   "description": "Sum of completed internal jobs on this bike",
+   "fieldname": "prep_cost",
+   "fieldtype": "Currency",
+   "label": "Prep Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cb_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "asking_price",
+   "fieldtype": "Currency",
+   "label": "Asking Price"
+  },
+  {
+   "fieldname": "sold_date",
+   "fieldtype": "Date",
+   "label": "Sold Date"
+  },
+  {
+   "fieldname": "sold_price",
+   "fieldtype": "Currency",
+   "label": "Sold Price"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "sb_hist",
+   "fieldtype": "Section Break",
+   "label": "History"
+  },
+  {
+   "fieldname": "odometer_history",
+   "fieldtype": "Table",
+   "label": "Odometer History",
+   "options": "Motorcycle Odometer Reading"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "evopos_unit_id",
+   "fieldtype": "Data",
+   "label": "EvoPOS Unit ID",
+   "no_copy": 1,
+   "read_only": 1
+  }
+ ],
+ "icon": "fa fa-motorcycle",
+ "istable": 0,
+ "modified": "2026-11-12 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Revelry Workshop",
+ "name": "Motorcycle",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Stock User",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 0,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts User",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 0,
+ "search_fields": "vin,rego,make,model,customer",
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "title",
+ "track_changes": 1
+}
