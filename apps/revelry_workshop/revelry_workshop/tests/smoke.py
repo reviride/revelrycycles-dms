@@ -33,7 +33,10 @@ def run():
 
 	if not frappe.db.exists("Item", "OILFILTER"):
 		frappe.get_doc({"doctype": "Item", "item_code": "OILFILTER", "item_name": "Oil filter",
-			"item_group": "Products", "stock_uom": "Nos", "is_stock_item": 0}).insert()
+			"item_group": "Products", "stock_uom": "Nos", "is_stock_item": 1, "valuation_rate": 10}).insert()
+	rec = frappe.get_doc({"doctype": "Stock Entry", "stock_entry_type": "Material Receipt", "company": company,
+		"items": [{"item_code": "OILFILTER", "qty": 5, "t_warehouse": f"Stores - {abbr}", "basic_rate": 10}]})
+	rec.insert(); rec.submit()
 	s = frappe.get_doc("Workshop Settings")
 	assert s.labour_item == "LABOUR" and s.wip_warehouse == f"Work In Progress - {abbr}", s.as_dict()
 	assert s.sales_taxes_template == f"AU Sales - GST - {abbr}", s.sales_taxes_template
@@ -76,6 +79,20 @@ def run():
 	assert job.checklist[0].completed_by == "Administrator"
 	assert frappe.db.get_value("Motorcycle", bike.name, "odometer") == 15980
 
+	# fitting the part moves it to WIP
+	job.parts[0].part_status = "Fitted"
+	job.save()
+	job.reload()
+	assert job.parts[0].stock_entry, "fitted part should have a stock entry"
+	from erpnext.stock.utils import get_stock_balance
+	assert get_stock_balance("OILFILTER", f"Work In Progress - {abbr}") == 1
+	assert get_stock_balance("OILFILTER", f"Stores - {abbr}") == 4
+
+	from revelry_workshop.revelry_workshop.deposits import take_deposit
+	pe = take_deposit(job.name, 100, "Cash")
+	job.reload()
+	assert job.deposit_total == 100, job.deposit_total
+
 	job.status = "Completed"; job.odometer_out = 15985; job.save()
 	job.status = "Approved"; job.save()
 
@@ -86,9 +103,18 @@ def run():
 	print("invoice", si.name, "grand_total", si.grand_total, "tax", si.total_taxes_and_charges)
 	assert abs(si.grand_total - 389) < 0.01, si.grand_total
 	assert abs(si.total_taxes_and_charges - 35.36) < 0.02, si.total_taxes_and_charges
+	assert abs(si.outstanding_amount - 289) < 0.01, ("deposit applied", si.outstanding_amount, [a.allocated_amount for a in si.advances])
 	si.submit()
 	assert frappe.db.get_value("Workshop Job", job.name, "status") == "Invoiced"
+	assert get_stock_balance("OILFILTER", f"Work In Progress - {abbr}") == 0, "invoice sells from WIP"
 	si.cancel()
 	assert frappe.db.get_value("Workshop Job", job.name, "status") == "Approved"
+	# cancelling a job puts fitted parts back on the shelf
+	job2 = frappe.get_doc({"doctype": "Workshop Job", "motorcycle": bike.name, "description": "Cancel test",
+		"parts": [{"item_code": "OILFILTER", "qty": 1, "rate": 25, "part_status": "Fitted"}]}).insert()
+	assert job2.status == "In Progress"
+	assert get_stock_balance("OILFILTER", f"Stores - {abbr}") == 3
+	job2.status = "Cancelled"; job2.save(); job2.reload()
+	assert get_stock_balance("OILFILTER", f"Stores - {abbr}") == 4 and job2.parts[0].part_status == "Returned"
 	frappe.db.rollback()
 	print("SMOKE OK")

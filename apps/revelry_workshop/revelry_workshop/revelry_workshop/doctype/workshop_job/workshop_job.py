@@ -16,9 +16,13 @@ class WorkshopJob(Document):
 		self.stamp_checklist()
 		self.calculate_totals()
 		self.validate_status()
+		self.set_parts_status()
 
 	def on_update(self):
 		self.update_motorcycle()
+		from revelry_workshop.revelry_workshop.stock import sync_fitted_parts
+
+		sync_fitted_parts(self)
 
 	# ---------- helpers ----------
 	def set_bike_label(self):
@@ -79,6 +83,20 @@ class WorkshopJob(Document):
 		if self.status == "Approved" and self.has_value_changed("status"):
 			if not {"System Manager", "Workshop Manager"} & set(frappe.get_roles()):
 				frappe.throw(_("Only the workshop manager can approve a job."))
+
+	def set_parts_status(self):
+		"""Roll the parts lines up to the job's parts status, as EvoPOS does for customer orders."""
+		states = {r.part_status for r in self.parts}
+		if "On Order" in states:
+			self.parts_status = "On Order"
+		elif "Requested" in states:
+			self.parts_status = "Requested"
+		elif self.parts_status in ("On Order", "Requested"):
+			self.parts_status = "OK"
+		for r in self.parts:
+			if r.part_status == "Fitted" and self.status in ("Booked", "Available"):
+				self.status = "In Progress"  # booking parts onto the job starts it, as in EvoPOS
+				break
 
 	def update_motorcycle(self):
 		if not self.motorcycle:

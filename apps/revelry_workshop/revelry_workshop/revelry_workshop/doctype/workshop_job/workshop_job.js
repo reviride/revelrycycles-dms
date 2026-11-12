@@ -13,6 +13,31 @@ frappe.ui.form.on("Workshop Job", {
 				});
 			}).addClass("btn-primary");
 		}
+		if (!frm.is_new() && !["Invoiced", "Cancelled"].includes(frm.doc.status)) {
+			frm.add_custom_button(__("Take Deposit"), () => {
+				const d = new frappe.ui.Dialog({
+					title: __("Take Deposit"),
+					fields: [
+						{ fieldname: "amount", fieldtype: "Currency", label: __("Amount"), reqd: 1 },
+						{ fieldname: "mode_of_payment", fieldtype: "Link", options: "Mode of Payment", label: __("Paid By"), reqd: 1, default: "Cash" },
+					],
+					primary_action_label: __("Record Deposit"),
+					primary_action(values) {
+						frappe.call({
+							method: "revelry_workshop.revelry_workshop.deposits.take_deposit",
+							args: { job: frm.doc.name, ...values },
+							freeze: true,
+							callback(r) {
+								d.hide();
+								frappe.show_alert({ message: __("Deposit {0} recorded", [r.message]), indicator: "green" });
+								frm.reload_doc();
+							},
+						});
+					},
+				});
+				d.show();
+			});
+		}
 		if (frm.doc.sales_invoice) {
 			frm.add_custom_button(__("Open Invoice"), () =>
 				frappe.set_route("Form", "Sales Invoice", frm.doc.sales_invoice)

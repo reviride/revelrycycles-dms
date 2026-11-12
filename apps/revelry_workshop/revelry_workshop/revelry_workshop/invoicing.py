@@ -105,6 +105,10 @@ def make_sales_invoice(job):
 		if tax.charge_type == "On Net Total":
 			tax.included_in_print_rate = 1
 	si.calculate_taxes_and_totals()
+	# deposits taken on the jobs (customer advances) come off the invoice
+	si.allocate_advances_automatically = 1
+	si.set_advances()
+	si.calculate_taxes_and_totals()
 	si.insert()
 	for jb in jobs:
 		frappe.db.set_value("Workshop Job", jb.name, "sales_invoice", si.name)
