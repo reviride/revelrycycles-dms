@@ -13,6 +13,20 @@ frappe.ui.form.on("Workshop Job", {
 				});
 			}).addClass("btn-primary");
 		}
+		if (!frm.is_new() && !["Invoiced", "Cancelled"].includes(frm.doc.status)
+			&& (frm.doc.parts || []).some((p) => p.part_status === "Booked" && ["Stock", "Special Order"].includes(p.source))) {
+			frm.add_custom_button(__("Request Parts"), () => {
+				const go = () => frappe.call({
+					method: "revelry_workshop.revelry_workshop.parts.request_parts",
+					args: { job: frm.doc.name },
+					freeze: true,
+					callback: () => frm.reload_doc(),
+				});
+				frm.is_dirty() ? frm.save().then(go) : go();
+			});
+		}
+		const requests = [...new Set((frm.doc.parts || []).map((p) => p.material_request).filter(Boolean))];
+		requests.forEach((mr) => frm.add_custom_button(mr, () => frappe.set_route("Form", "Material Request", mr), __("Parts Requests")));
 		if (!frm.is_new() && !["Invoiced", "Cancelled"].includes(frm.doc.status)) {
 			frm.add_custom_button(__("Take Deposit"), () => {
 				const d = new frappe.ui.Dialog({

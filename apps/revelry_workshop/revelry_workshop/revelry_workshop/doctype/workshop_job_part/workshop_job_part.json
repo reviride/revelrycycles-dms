@@ -14,7 +14,9 @@
   "part_status",
   "eta",
   "fitted_on",
-  "stock_entry"
+  "stock_entry",
+  "material_request",
+  "purchase_order"
  ],
  "fields": [
   {
@@ -91,10 +93,26 @@
    "no_copy": 1,
    "options": "Stock Entry",
    "read_only": 1
+  },
+  {
+   "fieldname": "material_request",
+   "fieldtype": "Link",
+   "label": "Material Request",
+   "no_copy": 1,
+   "options": "Material Request",
+   "read_only": 1
+  },
+  {
+   "fieldname": "purchase_order",
+   "fieldtype": "Link",
+   "label": "Purchase Order",
+   "no_copy": 1,
+   "options": "Purchase Order",
+   "read_only": 1
   }
  ],
  "istable": 1,
- "modified": "2026-11-12 10:00:00.000000",
+ "modified": "2026-11-12 14:10:00.000000",
  "modified_by": "Administrator",
  "module": "Revelry Workshop",
  "name": "Workshop Job Part",

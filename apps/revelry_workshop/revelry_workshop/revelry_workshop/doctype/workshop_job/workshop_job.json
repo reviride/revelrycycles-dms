@@ -70,6 +70,7 @@
   "grand_total",
   "deposit_total",
   "sales_invoice",
+  "invoiced_on",
   "sb_evopos",
   "evopos_job_no",
   "evopos_status"
@@ -456,6 +457,13 @@
    "read_only": 1
   },
   {
+   "fieldname": "invoiced_on",
+   "fieldtype": "Date",
+   "label": "Invoiced On",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
    "collapsible": 1,
    "fieldname": "sb_evopos",
    "fieldtype": "Section Break",
@@ -479,7 +487,7 @@
  ],
  "is_calendar_and_gantt": 1,
  "istable": 0,
- "modified": "2026-11-12 10:00:00.000000",
+ "modified": "2026-11-12 14:20:00.000000",
  "modified_by": "Administrator",
  "module": "Revelry Workshop",
  "name": "Workshop Job",

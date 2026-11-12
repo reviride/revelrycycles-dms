@@ -117,9 +117,9 @@ def make_sales_invoice(job):
 
 def on_sales_invoice_submit(doc, method=None):
 	for name in frappe.get_all("Workshop Job", {"sales_invoice": doc.name}, pluck="name"):
-		frappe.db.set_value("Workshop Job", name, "status", "Invoiced")
+		frappe.db.set_value("Workshop Job", name, {"status": "Invoiced", "invoiced_on": doc.posting_date})
 
 
 def on_sales_invoice_cancel(doc, method=None):
 	for name in frappe.get_all("Workshop Job", {"sales_invoice": doc.name}, pluck="name"):
-		frappe.db.set_value("Workshop Job", name, {"status": "Approved", "sales_invoice": None})
+		frappe.db.set_value("Workshop Job", name, {"status": "Approved", "sales_invoice": None, "invoiced_on": None})

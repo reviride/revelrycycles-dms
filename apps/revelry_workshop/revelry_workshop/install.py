@@ -114,6 +114,17 @@ def setup_views():
 				}
 			).insert(ignore_permissions=True)
 
+	if not frappe.db.exists("Dashboard Chart", "Workshop Revenue"):
+		frappe.get_doc(
+			{
+				"doctype": "Dashboard Chart", "chart_name": "Workshop Revenue", "name": "Workshop Revenue",
+				"chart_type": "Sum", "document_type": "Workshop Job", "based_on": "invoiced_on",
+				"value_based_on": "grand_total", "timeseries": 1, "time_interval": "Monthly",
+				"timespan": "Last Year", "type": "Bar", "is_public": 1, "module": "Revelry Workshop",
+				"filters_json": json.dumps([["Workshop Job", "status", "=", "Invoiced"]]), "is_standard": 0,
+			}
+		).insert(ignore_permissions=True)
+
 	if frappe.db.exists("Workspace", "Workshop"):
 		frappe.delete_doc("Workspace", "Workshop", ignore_permissions=True, force=True)
 	if True:
@@ -121,6 +132,7 @@ def setup_views():
 			{
 				"doctype": "Workspace", "name": "Workshop", "label": "Workshop", "title": "Workshop",
 				"module": "Revelry Workshop", "public": 1, "icon": "tool", "sequence_id": 1.5,
+				"charts": [{"chart_name": "Workshop Revenue", "label": "Workshop Revenue (inc GST)"}],
 				"number_cards": [{"number_card_name": l, "label": l.replace("Workshop: ", "")} for l, _ in cards],
 				"shortcuts": [
 					{"type": "URL", "label": "Job Board", "url": "/app/workshop-job/view/kanban/Workshop Board", "color": "Blue"},
@@ -133,6 +145,7 @@ def setup_views():
 			}
 		)
 		blocks = [{"id": f"h{i}", "type": "number_card", "data": {"number_card_name": l.replace("Workshop: ", ""), "col": 3}} for i, (l, _) in enumerate(cards)]
+		blocks.append({"id": "ch", "type": "chart", "data": {"chart_name": "Workshop Revenue (inc GST)", "col": 12}})
 		blocks.append({"id": "sp", "type": "spacer", "data": {"col": 12}})
 		blocks += [{"id": f"s{i}", "type": "shortcut", "data": {"shortcut_name": sc.label, "col": 3}} for i, sc in enumerate(ws.shortcuts)]
 		ws.content = json.dumps(blocks)

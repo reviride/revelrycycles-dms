@@ -4,3 +4,4 @@
 revelry_workshop.patches.set_default_settings
 revelry_workshop.patches.setup_views_v1
 revelry_workshop.patches.setup_views_v2
+revelry_workshop.patches.setup_views_v3
