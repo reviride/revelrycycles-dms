@@ -13,3 +13,5 @@ doc_events = {
 	}
 }
 after_install = "revelry_workshop.install.after_install"
+
+jinja = {"methods": ["revelry_workshop.revelry_workshop.printing.job_qr"]}

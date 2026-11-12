@@ -7,6 +7,7 @@ def after_install():
 			ignore_permissions=True
 		)
 	set_default_settings()
+	setup_views()
 
 
 def set_default_settings():
@@ -44,3 +45,93 @@ def set_default_settings():
 		s.sales_taxes_template = f"AU Sales - GST - {abbr}"
 	s.flags.ignore_permissions = True
 	s.save()
+
+
+BOARD_COLUMNS = [
+	("Booked", "Gray"), ("Available", "Blue"), ("In Progress", "Green"), ("Hold", "Orange"),
+	("Completed", "Cyan"), ("Approved", "Purple"),
+]
+
+
+def setup_views():
+	"""Job board, printed job card and Workshop workspace. Safe to run again."""
+	import os
+
+	if not frappe.db.exists("Kanban Board", "Workshop Board"):
+		frappe.get_doc(
+			{
+				"doctype": "Kanban Board",
+				"kanban_board_name": "Workshop Board",
+				"reference_doctype": "Workshop Job",
+				"field_name": "status",
+				"private": 0,
+				"show_labels": 1,
+				"fields": '["customer_name", "bike", "technician", "parts_status", "priority", "scheduled_start"]',
+				"columns": [{"column_name": c, "status": "Active", "indicator": i} for c, i in BOARD_COLUMNS],
+				"filters": '[["Workshop Job", "status", "not in", ["Invoiced", "Cancelled"]]]',
+			}
+		).insert(ignore_permissions=True)
+
+	html = open(os.path.join(os.path.dirname(__file__), "setup_assets", "job_card.html")).read()
+	if frappe.db.exists("Print Format", "Workshop Job Card"):
+		frappe.db.set_value("Print Format", "Workshop Job Card", "html", html)
+	else:
+		frappe.get_doc(
+			{
+				"doctype": "Print Format",
+				"name": "Workshop Job Card",
+				"doc_type": "Workshop Job",
+				"module": "Revelry Workshop",
+				"standard": "No",
+				"custom_format": 1,
+				"print_format_type": "Jinja",
+				"html": html,
+				"disabled": 0,
+			}
+		).insert(ignore_permissions=True)
+	frappe.make_property_setter(
+		{"doctype": "Workshop Job", "doctype_or_field": "DocType", "property": "default_print_format",
+		 "value": "Workshop Job Card", "property_type": "Data"},
+		validate_fields_for_doctype=False,
+	)
+
+	cards = [
+		("Workshop: In Progress", [["Workshop Job", "status", "=", "In Progress"]]),
+		("Workshop: Waiting on Parts", [["Workshop Job", "parts_status", "in", ["Requested", "To Order", "On Order"]],
+										["Workshop Job", "status", "not in", ["Invoiced", "Cancelled"]]]),
+		("Workshop: Awaiting Approval", [["Workshop Job", "status", "=", "Completed"]]),
+		("Workshop: Ready to Invoice", [["Workshop Job", "status", "=", "Approved"]]),
+	]
+	import json
+
+	for label, filters in cards:
+		if not frappe.db.exists("Number Card", label):
+			frappe.get_doc(
+				{
+					"doctype": "Number Card", "label": label, "name": label, "type": "Document Type",
+					"document_type": "Workshop Job", "function": "Count", "is_public": 1,
+					"filters_json": json.dumps(filters), "module": "Revelry Workshop", "is_standard": 0,
+				}
+			).insert(ignore_permissions=True)
+
+	if not frappe.db.exists("Workspace", "Workshop"):
+		ws = frappe.get_doc(
+			{
+				"doctype": "Workspace", "name": "Workshop", "label": "Workshop", "title": "Workshop",
+				"module": "Revelry Workshop", "public": 1, "icon": "tool", "sequence_id": 1.5,
+				"number_cards": [{"number_card_name": l, "label": l.replace("Workshop: ", "")} for l, _ in cards],
+				"shortcuts": [
+					{"type": "URL", "label": "Job Board", "url": "/app/workshop-job/view/kanban/Workshop Board", "color": "Blue"},
+					{"type": "URL", "label": "Calendar", "url": "/app/workshop-job/view/calendar/default", "color": "Green"},
+					{"type": "DocType", "link_to": "Workshop Job", "label": "Workshop Jobs", "doc_view": "List"},
+					{"type": "DocType", "link_to": "Motorcycle", "label": "Motorcycles", "doc_view": "List"},
+					{"type": "DocType", "link_to": "Workshop Job Template", "label": "Job Templates", "doc_view": "List"},
+					{"type": "DocType", "link_to": "Workshop Settings", "label": "Workshop Settings"},
+				],
+			}
+		)
+		blocks = [{"id": f"h{i}", "type": "number_card", "data": {"number_card_name": l, "col": 3}} for i, (l, _) in enumerate(cards)]
+		blocks.append({"id": "sp", "type": "spacer", "data": {"col": 12}})
+		blocks += [{"id": f"s{i}", "type": "shortcut", "data": {"shortcut_name": sc.label, "col": 3}} for i, sc in enumerate(ws.shortcuts)]
+		ws.content = json.dumps(blocks)
+		ws.insert(ignore_permissions=True)

@@ -2,3 +2,4 @@
 
 [post_model_sync]
 revelry_workshop.patches.set_default_settings
+revelry_workshop.patches.setup_views_v1

@@ -1,0 +1,79 @@
+<style>
+  .jc { font-size: 11px; }
+  .jc h2 { margin: 0; font-size: 18px; }
+  .jc table { width: 100%; border-collapse: collapse; margin-top: 6px; }
+  .jc th, .jc td { border: 1px solid #999; padding: 3px 5px; vertical-align: top; text-align: left; }
+  .jc th { background: #f0f0f0; }
+  .jc .box { border: 1px solid #999; padding: 5px; margin-top: 6px; min-height: 30px; white-space: pre-wrap; }
+  .jc .muted { color: #555; }
+</style>
+<div class="jc">
+  <table style="border:none">
+    <tr>
+      <td style="border:none">
+        <h2>{{ frappe.db.get_single_value("Global Defaults", "default_company") or "" }}</h2>
+        <div><b>JOB CARD</b> &nbsp; {{ doc.name }}{% if doc.evopos_job_no %} <span class="muted">(EvoPOS {{ doc.evopos_job_no }})</span>{% endif %}</div>
+        <div class="muted">Printed {{ frappe.utils.format_datetime(frappe.utils.now_datetime(), "dd-MM-yyyy HH:mm") }}</div>
+      </td>
+      <td style="border:none; text-align:right; width:110px">
+        <img src="{{ job_qr(doc.name) }}" style="width:100px;height:100px">
+      </td>
+    </tr>
+  </table>
+  <table>
+    <tr><th style="width:50%">Customer</th><th>Bike</th></tr>
+    <tr>
+      <td>
+        {{ doc.customer_name or doc.customer or "Internal" }}<br>
+        {% if doc.mobile_no %}Mobile: {{ doc.mobile_no }}<br>{% endif %}
+        {% if doc.customer_reference %}Ref: {{ doc.customer_reference }}{% endif %}
+      </td>
+      <td>
+        {{ doc.bike or "" }}<br>
+        VIN: {{ doc.vin or "" }} &nbsp; Rego: {{ doc.rego or "" }}<br>
+        Odometer in: {{ doc.odometer_in or "____" }} &nbsp; out: {{ doc.odometer_out or "____" }}
+      </td>
+    </tr>
+  </table>
+  <table>
+    <tr><th>Status</th><th>Type</th><th>Priority</th><th>Technician</th><th>Start</th><th>Required by</th><th>Est. hours</th></tr>
+    <tr>
+      <td>{{ doc.status }}</td><td>{{ doc.job_type }}</td><td>{{ doc.priority }}</td>
+      <td>{{ frappe.db.get_value("User", doc.technician, "full_name") if doc.technician else "" }}</td>
+      <td>{{ frappe.utils.format_datetime(doc.scheduled_start, "dd-MM-yy HH:mm") if doc.scheduled_start else "" }}</td>
+      <td>{{ frappe.utils.format_datetime(doc.required_by, "dd-MM-yy HH:mm") if doc.required_by else "" }}</td>
+      <td>{{ doc.estimated_hours or "" }}</td>
+    </tr>
+  </table>
+  <div class="box"><b>{{ doc.description }}</b>
+{{ doc.details or "" }}</div>
+  {% if doc.checklist %}
+  <table>
+    <tr><th>Checklist</th><th style="width:40px">Code</th><th style="width:70px">Result</th><th>Comment</th></tr>
+    {% for r in doc.checklist %}
+    <tr><td>{{ r.item_text }}</td><td>{{ r.code or "" }}</td><td>{{ r.result or "" }}</td><td>{{ r.comment or "" }}</td></tr>
+    {% endfor %}
+  </table>
+  {% endif %}
+  <table>
+    <tr><th style="width:40px">Qty</th><th style="width:110px">Part no.</th><th>Description</th><th style="width:80px">Status</th></tr>
+    {% for p in doc.parts %}
+    <tr><td>{{ p.qty }}</td><td>{{ p.item_code or "" }}</td><td>{{ p.item_name or "" }}</td><td>{{ p.part_status }}</td></tr>
+    {% endfor %}
+    {% for i in range(3) %}<tr><td>&nbsp;</td><td></td><td></td><td></td></tr>{% endfor %}
+  </table>
+  <table>
+    <tr><th>Time spent: technician</th><th style="width:80px">Hours</th><th>Work done</th></tr>
+    {% for l in doc.labour %}
+    <tr><td>{{ frappe.db.get_value("User", l.technician, "full_name") if l.technician else "" }}</td><td>{{ l.hours or "" }}</td><td>{{ l.description or "" }}</td></tr>
+    {% endfor %}
+    {% for i in range(2) %}<tr><td>&nbsp;</td><td></td><td></td></tr>{% endfor %}
+  </table>
+  <table>
+    <tr><th>New parts location</th><th>Stripped parts location</th><th>Bike location</th></tr>
+    <tr><td>{{ doc.new_parts_location or "" }}</td><td>{{ doc.stripped_parts_location or "" }}</td><td>{{ doc.unit_location or "" }}</td></tr>
+  </table>
+  <div class="box"><b>Notes</b>
+{{ doc.work_done or "" }}</div>
+  <p class="muted">Quote the job number to the parts counter when requesting parts.</p>
+</div>

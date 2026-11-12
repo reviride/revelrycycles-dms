@@ -49,7 +49,7 @@ def run():
 		"model": "Continental GT 650", "year": 2022, "rego": "abc12", "customer": cust}).insert()
 	assert bike.vin == "ME3CNEGT6NK00SMK1" and bike.title == "2022 Royal Enfield Continental GT 650 (ABC12)", bike.title
 
-	tpl_code = "RE 650 FULL SERVICE"
+	tpl_code = "SMOKE FULL SERVICE"
 	if not frappe.db.exists("Workshop Job Template", tpl_code):
 		frappe.get_doc({"doctype": "Workshop Job Template", "template_code": tpl_code,
 			"description": "RE 650 FULL SERVICE (.5,10,20)", "estimated_hours": 2.6, "labour_rate": 140,
