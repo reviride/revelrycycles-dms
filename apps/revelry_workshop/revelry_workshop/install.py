@@ -114,7 +114,9 @@ def setup_views():
 				}
 			).insert(ignore_permissions=True)
 
-	if not frappe.db.exists("Workspace", "Workshop"):
+	if frappe.db.exists("Workspace", "Workshop"):
+		frappe.delete_doc("Workspace", "Workshop", ignore_permissions=True, force=True)
+	if True:
 		ws = frappe.get_doc(
 			{
 				"doctype": "Workspace", "name": "Workshop", "label": "Workshop", "title": "Workshop",
@@ -130,7 +132,7 @@ def setup_views():
 				],
 			}
 		)
-		blocks = [{"id": f"h{i}", "type": "number_card", "data": {"number_card_name": l, "col": 3}} for i, (l, _) in enumerate(cards)]
+		blocks = [{"id": f"h{i}", "type": "number_card", "data": {"number_card_name": l.replace("Workshop: ", ""), "col": 3}} for i, (l, _) in enumerate(cards)]
 		blocks.append({"id": "sp", "type": "spacer", "data": {"col": 12}})
 		blocks += [{"id": f"s{i}", "type": "shortcut", "data": {"shortcut_name": sc.label, "col": 3}} for i, sc in enumerate(ws.shortcuts)]
 		ws.content = json.dumps(blocks)
